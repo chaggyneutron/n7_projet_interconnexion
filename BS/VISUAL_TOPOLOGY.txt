@@ -1,0 +1,117 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    TOPOLOGIE RÉSEAU - PROJET AS5 (GROUPE 5)                 ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+                        ┌─────────────────────────┐
+                        │   Internet Router (AS1)   │
+                        │     10.0.0.1              │
+                        │   BGP: AS1                │
+                        └───────────┬───────────────┘
+                                    │
+                        ┌───────────┴───────────────┐
+                        │                           │
+            ┌───────────▼───────────┐    ┌─────────▼──────────┐
+            │    AS5-Border Router  │    │ Site Secondaire    │
+            │     120.0.80.1        │    │     Router         │
+            │   OSPF + BGP (AS5)    │    │    10.0.1.10       │
+            └───────────┬───────────┘    └─────────┬──────────┘
+                        │                         │
+        ┌───────────────┼───────────────┐         │
+        │               │               │         │
+┌───────▼──────┐  ┌─────▼─────┐  ┌─────▼─────┐  ┌─▼──────────────┐
+│ AS5-Internal │  │ Entreprise│  │Particulier│  │ Site Secondaire│
+│   Router     │  │  Router   │  │   Box     │  │      LAN       │
+│ 120.0.80.2   │  │120.0.82.10│  │120.0.83.10│  │  10.0.2.0/24   │
+└───────┬──────┘  └─────┬─────┘  └─────┬─────┘  │                │
+        │               │               │        │ - Client 1     │
+┌───────▼──────┐  ┌─────▼─────┐  ┌─────▼─────┐  │ - OpenVPN      │
+│ Services AS5 │  │ Entreprise │  │Particulier│  └────────────────┘
+│  120.0.85.0  │  │    LAN     │  │    LAN    │
+│              │  │120.0.84.0  │  │192.168.5.0│
+│ - DNS AS5    │  │            │  │           │
+│  (récursif)  │  │ - DNS Ent. │  │ - Client 1│
+│  120.0.85.10 │  │ - Radius   │  │ - Client 2│
+└──────────────┘  │ - Asterisk │  └───────────┘
+                  │ - Nginx    │
+                  │ - OpenVPN  │
+                  │ - Clients  │
+                  └────────────┘
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                          ADRESSAGE IP DÉTAILLÉ                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+AS5 (120.0.80.0/20) :
+  ├─ 120.0.80.0/24   → Backbone AS5 (routeurs)
+  ├─ 120.0.81.0/24   → Lien AS5 ↔ Internet
+  ├─ 120.0.82.0/24   → Lien AS5 ↔ Entreprise
+  ├─ 120.0.83.0/24   → Lien AS5 ↔ Particulier
+  ├─ 120.0.84.0/24   → LAN Entreprise 5
+  └─ 120.0.85.0/24   → Services AS5
+
+Réseaux Externes :
+  ├─ 10.0.0.0/24     → Backbone Internet
+  ├─ 10.0.1.0/24     → Lien Internet ↔ Site Secondaire
+  ├─ 10.0.2.0/24     → LAN Site Secondaire
+  └─ 192.168.5.0/24  → LAN Particulier (NAT)
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                          SERVICES ET PORTS                                  ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Services Entreprise (120.0.84.0/24) :
+  ├─ DNS Entreprise      → 120.0.84.10:53 (autoritaire pour entreprise5.lan)
+  ├─ FreeRADIUS          → 120.0.84.11:1812 (authentification)
+  ├─ Asterisk (VoIP)     → 120.0.84.12:5060 (SIP), 10000-10020 (RTP)
+  ├─ Nginx (Web)         → 120.0.84.13:80
+  └─ OpenVPN             → 120.0.84.14:1194 (VPN site-à-site + accès distant)
+
+Services AS5 :
+  └─ DNS AS5             → 120.0.85.10:53 (récursif, forwarders 8.8.8.8)
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                          PROTOCOLES DE ROUTAGE                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+OSPF (Interne AS5) :
+  ├─ Area 0 : Tous les réseaux AS5
+  ├─ AS5-Border (Router-ID: 120.0.80.1)
+  └─ AS5-Internal (Router-ID: 120.0.80.2)
+
+BGP (Externe) :
+  ├─ AS5-Border ↔ Internet Router
+  │   ├─ AS5-Border : AS 5
+  │   └─ Internet Router : AS 1
+  │   └─ Route annoncée : 120.0.80.0/20
+  │
+  └─ iBGP (Interne) :
+      └─ AS5-Border ↔ AS5-Internal
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                          SÉCURITÉ ET NAT                                     ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+NAT/Masquerade :
+  ├─ AS5-Border : 120.0.80.0/20 → Internet (eth1)
+  └─ Particulier5-Box : 192.168.5.0/24 → AS5 (eth0)
+
+Firewall (Routeur Entreprise) :
+  ├─ Autorise : DNS (53), HTTP/HTTPS (80/443), SIP (5060), RTP (10000-10020),
+  │             OpenVPN (1194), Radius (1812)
+  └─ Bloque : Tout le reste
+
+QoS (AS5-Border) :
+  ├─ Entreprise (120.0.84.0/24) : Priorité haute (80 Mbit/s garantis)
+  └─ Particulier (120.0.83.0/24) : Priorité normale (50 Mbit/s garantis)
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                          CONNEXIONS VPN                                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+VPN Site-à-Site :
+  ├─ Site Principal (120.0.84.14) ↔ Site Secondaire (10.0.2.11)
+  └─ Réseaux VPN : 10.8.0.0/24 (principal), 10.9.0.0/24 (secondaire)
+
+VPN Accès Distant :
+  └─ Particulier 5 → Réseau Entreprise (accès sécurisé aux services)
+

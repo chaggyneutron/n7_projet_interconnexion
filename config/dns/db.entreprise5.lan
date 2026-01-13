@@ -1,0 +1,26 @@
+$TTL    604800
+@       IN      SOA     dns-entreprise5.entreprise5.lan. admin.entreprise5.lan. (
+                          2024010101     ; Serial
+                          604800         ; Refresh
+                          86400          ; Retry
+                          2419200        ; Expire
+                          604800 )       ; Negative Cache TTL
+;
+@       IN      NS      dns-entreprise5.entreprise5.lan.
+@       IN      A       120.0.84.10
+
+; Services
+dns-entreprise5    IN      A       120.0.84.10
+radius-entreprise5 IN     A       120.0.84.11
+asterisk-entreprise5 IN   A       120.0.84.12
+nginx-entreprise5  IN      A       120.0.84.13
+openvpn-entreprise5 IN     A       120.0.84.14
+
+; Clients
+client-entreprise5-1 IN    A       120.0.84.100
+client-entreprise5-2 IN    A       120.0.84.101
+
+; Alias
+www                 IN      CNAME   nginx-entreprise5.entreprise5.lan.
+voip                IN      CNAME   asterisk-entreprise5.entreprise5.lan.
+

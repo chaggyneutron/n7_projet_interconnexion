@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  as5-border:
+    image: frrouting/frr:latest
+    container_name: as5-border
+    hostname: as5-border
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    networks:
+      as5-backbone:
+        ipv4_address: 120.0.80.1
+      as5-internet:
+        ipv4_address: 120.0.81.1
+      as5-enterprise:
+        ipv4_address: 120.0.82.1
+      as5-particulier:
+        ipv4_address: 120.0.83.1
+    volumes:
+      - ./config/as5-border.conf:/etc/frr/frr.conf:ro
+      - ./config/daemons:/etc/frr/daemons:ro
+      # scripts en rw pour permettre le chmod +x au démarrage
+      - ../../scripts/qos-border.sh:/usr/local/bin/qos-border.sh:rw
+      - ../../scripts/nat-border.sh:/usr/local/bin/nat-border.sh:rw
+    command: /bin/sh -c "chmod +x /usr/local/bin/*.sh && /usr/local/bin/nat-border.sh && /usr/local/bin/qos-border.sh && chown frr:frr /etc/frr/daemons || true && /usr/lib/frr/docker-start"
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv6.conf.all.forwarding=1
+
+  as5-internal:
+    image: frrouting/frr:latest
+    container_name: as5-internal
+    hostname: as5-internal
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    networks:
+      as5-backbone:
+        ipv4_address: 120.0.80.2
+      as5-services:
+        ipv4_address: 120.0.85.1
+    volumes:
+      - ./config/as5-internal.conf:/etc/frr/frr.conf:ro
+      - ./config/daemons:/etc/frr/daemons:ro
+    command: /bin/sh -c "chown frr:frr /etc/frr/daemons || true && /usr/lib/frr/docker-start"
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv6.conf.all.forwarding=1
+
+networks:
+  as5-backbone:
+    external: true
+  as5-internet:
+    external: true
+  as5-enterprise:
+    external: true
+  as5-particulier:
+    external: true
+  as5-services:
+    external: true
+

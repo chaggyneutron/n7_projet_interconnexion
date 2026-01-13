@@ -1,0 +1,155 @@
+version: '3.8'
+
+services:
+  # Routeur Entreprise 5
+  entreprise5-router:
+    image: alpine:latest
+    container_name: entreprise5-router
+    hostname: entreprise5-router
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    networks:
+      as5-enterprise:
+        ipv4_address: 120.0.82.10
+      entreprise5-lan:
+        ipv4_address: 120.0.84.1
+    volumes:
+      # script en rw pour chmod +x
+      - ./scripts/router-init.sh:/usr/local/bin/init.sh:rw
+    command: /bin/sh -c "apk add --no-cache iptables iproute2 && chmod +x /usr/local/bin/init.sh && /usr/local/bin/init.sh && tail -f /dev/null"
+    sysctls:
+      - net.ipv4.ip_forward=1
+
+  # DNS Entreprise (Autoritaire)
+  dns-entreprise5:
+    image: ubuntu/bind9:9.18-22.04_beta
+    container_name: dns-entreprise5
+    hostname: dns-entreprise5
+    networks:
+      entreprise5-lan:
+        ipv4_address: 120.0.84.10
+    volumes:
+      - ./config/dns/named-entreprise5.conf:/etc/bind/named.conf:ro
+      - ./config/dns/db.entreprise5.lan:/etc/bind/db.entreprise5.lan:ro
+      - ./config/dns/db.84.0.120:/etc/bind/db.84.0.120:ro
+      - ./config/dns/named.conf.options:/etc/bind/named.conf.options:ro
+    # ensure log dir exists, then run named
+    command: /bin/sh -c "mkdir -p /var/log/bind && touch /var/log/bind/named.log && /usr/sbin/named -f -c /etc/bind/named.conf"
+
+  # FreeRADIUS
+  radius-entreprise5:
+    image: freeradius/freeradius-server:latest
+    container_name: radius-entreprise5
+    hostname: radius-entreprise5
+    networks:
+      entreprise5-lan:
+        ipv4_address: 120.0.84.11
+    volumes:
+      - ./config/radius/clients.conf:/etc/freeradius/clients.conf:ro
+      - ./config/radius/users:/etc/freeradius/users:ro
+    command: freeradius -X
+
+  # Asterisk (VoIP)
+  asterisk-entreprise5:
+    image: andrius/asterisk:18-current
+    container_name: asterisk-entreprise5
+    hostname: asterisk-entreprise5
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    networks:
+      entreprise5-lan:
+        ipv4_address: 120.0.84.12
+    volumes:
+      - ./config/asterisk/asterisk.conf:/etc/asterisk/asterisk.conf:ro
+      - ./config/asterisk/sip.conf:/etc/asterisk/sip.conf:ro
+      - ./config/asterisk/pjsip.conf:/etc/asterisk/pjsip.conf:ro
+      - ./config/asterisk/extensions.conf:/etc/asterisk/extensions.conf:ro
+    ports:
+      - "5060:5060/udp"
+      - "10000-10020:10000-10020/udp"
+
+  # Nginx (Web)
+  nginx-entreprise5:
+    image: nginx:alpine
+    container_name: nginx-entreprise5
+    hostname: nginx-entreprise5
+    networks:
+      entreprise5-lan:
+        ipv4_address: 120.0.84.13
+    volumes:
+      - ./config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/nginx/html:/usr/share/nginx/html:ro
+    ports:
+      - "8081:80"
+
+  # OpenVPN
+  openvpn-entreprise5:
+    image: kylemanna/openvpn:latest
+    container_name: openvpn-entreprise5
+    hostname: openvpn-entreprise5
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    networks:
+      entreprise5-lan:
+        ipv4_address: 120.0.84.14
+    volumes:
+      - ./config/vpn:/etc/openvpn:rw
+    ports:
+      - "1194:1194/udp"
+    environment:
+      - OVPNDIR=/etc/openvpn
+    command: /bin/sh -c "if [ -f /etc/openvpn/server.conf ]; then openvpn --config /etc/openvpn/server.conf; else echo 'Certificats OpenVPN manquants'; tail -f /dev/null; fi"
+
+  # Serveur DHCP
+  dhcp-entreprise5:
+    image: networkboot/dhcpd:latest
+    container_name: dhcp-entreprise5
+    hostname: dhcp-entreprise5
+    networks:
+      entreprise5-lan:
+        ipv4_address: 120.0.84.15
+    volumes:
+      - ./config/dhcp/dhcpd.conf:/data/dhcpd.conf:ro
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    command: ["eth0"]
+    restart: unless-stopped
+
+  # Clients Entreprise
+  client-entreprise5-1:
+    image: alpine:latest
+    container_name: client-entreprise5-1
+    hostname: client-entreprise5-1
+    cap_add:
+      - NET_ADMIN
+    networks:
+      entreprise5-lan:
+        ipv4_address: 120.0.84.100
+    volumes:
+      - ../../scripts/client-init.sh:/usr/local/bin/init.sh:ro
+    command: /bin/sh -c "apk add --no-cache iproute2 curl bind-tools && sh /usr/local/bin/init.sh && tail -f /dev/null"
+
+  client-entreprise5-2:
+    image: alpine:latest
+    container_name: client-entreprise5-2
+    hostname: client-entreprise5-2
+    cap_add:
+      - NET_ADMIN
+    networks:
+      entreprise5-lan:
+        ipv4_address: 120.0.84.101
+    volumes:
+      - ../../scripts/client-init.sh:/usr/local/bin/init.sh:ro
+    command: /bin/sh -c "apk add --no-cache iproute2 curl bind-tools && sh /usr/local/bin/init.sh && tail -f /dev/null"
+
+networks:
+  as5-enterprise:
+    external: true
+  entreprise5-lan:
+    external: true
+

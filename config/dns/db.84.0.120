@@ -1,0 +1,18 @@
+$TTL    604800
+@       IN      SOA     dns-entreprise5.entreprise5.lan. admin.entreprise5.lan. (
+                          2024010101     ; Serial
+                          604800         ; Refresh
+                          86400          ; Retry
+                          2419200        ; Expire
+                          604800 )       ; Negative Cache TTL
+;
+@       IN      NS      dns-entreprise5.entreprise5.lan.
+
+10      IN      PTR     dns-entreprise5.entreprise5.lan.
+11      IN      PTR     radius-entreprise5.entreprise5.lan.
+12      IN      PTR     asterisk-entreprise5.entreprise5.lan.
+13      IN      PTR     nginx-entreprise5.entreprise5.lan.
+14      IN      PTR     openvpn-entreprise5.entreprise5.lan.
+100     IN      PTR     client-entreprise5-1.entreprise5.lan.
+101     IN      PTR     client-entreprise5-2.entreprise5.lan.
+

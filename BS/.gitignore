@@ -1,0 +1,23 @@
+# Certificats OpenVPN (ne pas commiter)
+config/vpn/**/*.key
+config/vpn/**/*.crt
+config/vpn/**/*.pem
+config/vpn/**/ta.key
+config/vpn/**/dh.pem
+
+# Logs
+*.log
+logs/
+
+# Fichiers temporaires
+*.tmp
+*.swp
+*~
+
+# Docker
+.docker/
+
+# IDE
+.vscode/
+.idea/
+

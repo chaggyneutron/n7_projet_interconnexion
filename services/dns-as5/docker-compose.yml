@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  dns-as5:
+    image: ubuntu/bind9:9.18-22.04_beta
+    container_name: dns-as5
+    hostname: dns-as5
+    networks:
+      as5-services:
+        ipv4_address: 120.0.85.10
+    volumes:
+      - ./config/named-as5.conf:/etc/bind/named.conf:ro
+      - ./config/named.conf.options:/etc/bind/named.conf.options:ro
+      - ./config/db.root:/etc/bind/db.root:ro
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+    # ensure log dir exists, then run named
+    command: /bin/sh -c "mkdir -p /var/log/bind && touch /var/log/bind/named.log && /usr/sbin/named -f -c /etc/bind/named.conf"
+
+networks:
+  as5-services:
+    external: true
+

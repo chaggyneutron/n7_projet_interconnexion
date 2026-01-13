@@ -1,0 +1,12 @@
+# Utilisateurs FreeRADIUS pour entreprise5
+# Format: username Cleartext-Password := "password"
+
+user1 Cleartext-Password := "password1"
+    Reply-Message := "Authentification reussie pour user1"
+
+user2 Cleartext-Password := "password2"
+    Reply-Message := "Authentification reussie pour user2"
+
+admin Cleartext-Password := "admin123"
+    Reply-Message := "Authentification reussie pour admin"
+

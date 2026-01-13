@@ -1,0 +1,81 @@
+version: '3.8'
+
+# ============================================
+# DOCKER-COMPOSE PRINCIPAL
+# ============================================
+# Ce fichier définit uniquement les réseaux
+# Les services sont définis dans leurs dossiers respectifs sous services/
+
+services:
+  # Placeholder pour définir les réseaux
+  _networks:
+    image: alpine:latest
+    command: sleep infinity
+    networks:
+      - as5-backbone
+      - as5-internet
+      - as5-enterprise
+      - as5-particulier
+      - as5-services
+      - entreprise5-lan
+      - particulier5-lan
+      - internet-backbone
+      - site-secondaire
+      - site-secondaire-lan
+
+networks:
+  # Réseaux AS5
+  as5-backbone:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 120.0.80.0/24
+  as5-internet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 120.0.81.0/24
+  as5-enterprise:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 120.0.82.0/24
+  as5-particulier:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 120.0.83.0/24
+  as5-services:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 120.0.85.0/24
+  entreprise5-lan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 120.0.84.0/24
+          gateway: 120.0.84.1
+  particulier5-lan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.5.0/24
+          gateway: 192.168.5.1
+  # Réseaux Internet/Site Secondaire
+  internet-backbone:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.0.0/24
+  site-secondaire:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.1.0/24
+  site-secondaire-lan:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.0.2.0/24
+          gateway: 10.0.2.1

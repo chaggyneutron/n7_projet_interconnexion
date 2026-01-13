@@ -1,0 +1,82 @@
+@startuml Architecture AS5
+!theme plain
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 10
+
+title Architecture Réseau - Projet AS5 (Groupe 5)\nSystème Autonome 5 (120.0.80.0/20)
+
+cloud "Internet\nAS1\n10.0.0.1" as Internet {
+}
+
+rectangle "AS5-Border Router\n120.0.80.1\nOSPF + BGP\nNAT + QoS" as AS5Border {
+}
+
+rectangle "AS5-Internal Router\n120.0.80.2\nOSPF + iBGP" as AS5Internal {
+}
+
+database "DNS AS5\n120.0.85.10\nRécursif" as DNSAS5
+
+rectangle "Entreprise Router\n120.0.82.10\nFirewall" as EntRouter {
+}
+
+rectangle "LAN Entreprise\n120.0.84.0/24" as EntLAN {
+  database "DNS\n120.0.84.10" as DNSEnt
+  database "Radius\n120.0.84.11" as Radius
+  database "Asterisk\n120.0.84.12\nVoIP" as Asterisk
+  database "Nginx\n120.0.84.13\nWeb" as Nginx
+  database "OpenVPN\n120.0.84.14\nVPN" as OpenVPNEnt
+  node "Client 1\n120.0.84.100" as Client1
+  node "Client 2\n120.0.84.101" as Client2
+}
+
+rectangle "Particulier Box\n120.0.83.10\nNAT" as PartBox {
+}
+
+rectangle "LAN Particulier\n192.168.5.0/24" as PartLAN {
+  node "Client 1\n192.168.5.10" as PartClient1
+  node "Client 2\n192.168.5.11" as PartClient2
+}
+
+rectangle "Site Secondaire Router\n10.0.1.10" as SiteRouter {
+}
+
+rectangle "LAN Site Secondaire\n10.0.2.0/24" as SiteLAN {
+  database "OpenVPN\n10.0.2.11" as OpenVPNSite
+  node "Client\n10.0.2.10" as SiteClient
+}
+
+' Connexions
+Internet -[#0000FF,thickness=2] "120.0.81.0/24\nBGP" AS5Border
+AS5Border -[#0000FF,thickness=2] "120.0.80.0/24\nOSPF" AS5Internal
+AS5Internal -[#0000FF,thickness=2] "120.0.85.0/24" DNSAS5
+AS5Border -[#0000FF,thickness=2] "120.0.82.0/24" EntRouter
+EntRouter -[#00FF00,thickness=2] "Gateway\n120.0.84.1" EntLAN
+AS5Border -[#0000FF,thickness=2] "120.0.83.0/24" PartBox
+PartBox -[#00FF00,thickness=2] "Gateway\n192.168.5.1" PartLAN
+Internet -[#0000FF,thickness=2] "10.0.1.0/24" SiteRouter
+SiteRouter -[#00FF00,thickness=2] "Gateway\n10.0.2.1" SiteLAN
+
+' Connexions LAN
+EntLAN - DNSEnt
+EntLAN - Radius
+EntLAN - Asterisk
+EntLAN - Nginx
+EntLAN - OpenVPNEnt
+EntLAN - Client1
+EntLAN - Client2
+PartLAN - PartClient1
+PartLAN - PartClient2
+SiteLAN - OpenVPNSite
+SiteLAN - SiteClient
+
+' VPN Tunnel
+OpenVPNEnt ..[#FF0000,dashed,thickness=3] "VPN\nSite-à-Site" OpenVPNSite
+
+legend right
+  |<#0000FF>| Lien réseau (OSPF/BGP)
+  |<#00FF00>| Gateway
+  |<#FF0000>| Tunnel VPN
+endlegend
+
+@enduml
+

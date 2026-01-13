@@ -1,0 +1,304 @@
+<mxfile host="app.diagrams.net" modified="2025-12-06T14:00:00.000Z" agent="5.0" version="21.0.0" etag="systeme-complet" type="device">
+  <diagram name="Système Complet AS5" id="systeme-complet-as5">
+    <mxGraphModel dx="3000" dy="2400" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3600" pageHeight="2600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- ============================================ -->
+        <!-- INTERNET / AS1 -->
+        <!-- ============================================ -->
+        
+        <mxCell id="internet" value="Internet Router&#xa;AS1&#xa;10.0.0.1&#xa;BGP AS1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#4A90E2;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=router" vertex="1" parent="1">
+          <mxGeometry x="1600" y="80" width="140" height="140" as="geometry" />
+        </mxCell>
+        
+        <!-- ============================================ -->
+        <!-- AS5 BORDER ROUTER -->
+        <!-- ============================================ -->
+        
+        <mxCell id="as5border" value="AS5-Border Router&#xa;120.0.80.1&#xa;OSPF Area 0 + BGP AS5&#xa;NAT/Masquerade&#xa;QoS (tc)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#4A90E2;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=router" vertex="1" parent="1">
+          <mxGeometry x="800" y="400" width="140" height="160" as="geometry" />
+        </mxCell>
+        
+        <!-- ============================================ -->
+        <!-- AS5 INTERNAL ROUTER -->
+        <!-- ============================================ -->
+        
+        <mxCell id="as5internal" value="AS5-Internal Router&#xa;120.0.80.2&#xa;OSPF Area 0&#xa;iBGP AS5" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#4A90E2;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=router" vertex="1" parent="1">
+          <mxGeometry x="800" y="700" width="140" height="140" as="geometry" />
+        </mxCell>
+        
+        <!-- ============================================ -->
+        <!-- SERVICES AS5 -->
+        <!-- ============================================ -->
+        
+        <mxCell id="dnsas5" value="DNS AS5&#xa;120.0.85.10&#xa;Récursif&#xa;Forwarders: 8.8.8.8" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#D32F2F;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=10;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=server" vertex="1" parent="1">
+          <mxGeometry x="1050" y="700" width="120" height="120" as="geometry" />
+        </mxCell>
+        
+        <!-- ============================================ -->
+        <!-- ENTREPRISE ROUTER -->
+        <!-- ============================================ -->
+        
+        <mxCell id="entrouter" value="Entreprise Router&#xa;120.0.82.10&#xa;Firewall iptables&#xa;Gateway: 120.0.84.1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#4A90E2;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=router" vertex="1" parent="1">
+          <mxGeometry x="1200" y="400" width="140" height="160" as="geometry" />
+        </mxCell>
+        
+        <!-- ============================================ -->
+        <!-- LAN ENTREPRISE -->
+        <!-- ============================================ -->
+        
+        <mxCell id="entlan" value="LAN Entreprise&#xa;120.0.84.0/24" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#2E7D32;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=switch" vertex="1" parent="1">
+          <mxGeometry x="1200" y="650" width="140" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- Services Entreprise -->
+        <mxCell id="dnsent" value="DNS Entreprise&#xa;120.0.84.10&#xa;Autoritaire&#xa;entreprise5.lan" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#D32F2F;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=server" vertex="1" parent="1">
+          <mxGeometry x="1000" y="850" width="100" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="radius" value="FreeRADIUS&#xa;120.0.84.11&#xa;Auth: 1812/udp&#xa;Users: user1, user2" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#D32F2F;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=server" vertex="1" parent="1">
+          <mxGeometry x="1150" y="850" width="100" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="asterisk" value="Asterisk&#xa;120.0.84.12&#xa;VoIP/SIP&#xa;5060/udp" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#D32F2F;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=server" vertex="1" parent="1">
+          <mxGeometry x="1300" y="850" width="100" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nginx" value="Nginx&#xa;120.0.84.13&#xa;Web Server&#xa;80 (8081)" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#D32F2F;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=server" vertex="1" parent="1">
+          <mxGeometry x="1450" y="850" width="100" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="openvpn" value="OpenVPN&#xa;120.0.84.14&#xa;VPN Server&#xa;1194/udp" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#D32F2F;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=server" vertex="1" parent="1">
+          <mxGeometry x="1600" y="850" width="100" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="dhcp" value="DHCP&#xa;120.0.84.15&#xa;67/udp&#xa;Range: 100-200" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#D32F2F;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=server" vertex="1" parent="1">
+          <mxGeometry x="1750" y="850" width="100" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- Clients Entreprise -->
+        <mxCell id="client1" value="Client Entreprise 1&#xa;120.0.84.100" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#F57C00;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=pc" vertex="1" parent="1">
+          <mxGeometry x="1180" y="780" width="80" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="client2" value="Client Entreprise 2&#xa;120.0.84.101" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#F57C00;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=pc" vertex="1" parent="1">
+          <mxGeometry x="1300" y="780" width="80" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- ============================================ -->
+        <!-- PARTICULIER BOX -->
+        <!-- ============================================ -->
+        
+        <mxCell id="partbox" value="Particulier Box&#xa;120.0.83.10&#xa;NAT/Masquerade&#xa;Gateway: 192.168.5.1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#4A90E2;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=router" vertex="1" parent="1">
+          <mxGeometry x="300" y="400" width="140" height="160" as="geometry" />
+        </mxCell>
+        
+        <!-- LAN Particulier -->
+        <mxCell id="partlan" value="LAN Particulier&#xa;192.168.5.0/24" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#2E7D32;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=switch" vertex="1" parent="1">
+          <mxGeometry x="300" y="650" width="140" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- Clients Particulier -->
+        <mxCell id="partclient1" value="Client Particulier 1&#xa;192.168.5.10" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#F57C00;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=pc" vertex="1" parent="1">
+          <mxGeometry x="220" y="850" width="80" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="partclient2" value="Client Particulier 2&#xa;192.168.5.11" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#F57C00;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=pc" vertex="1" parent="1">
+          <mxGeometry x="380" y="850" width="80" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- ============================================ -->
+        <!-- SITE SECONDAIRE ROUTER -->
+        <!-- ============================================ -->
+        
+        <mxCell id="siterouter" value="Site Secondaire Router&#xa;10.0.1.10&#xa;Gateway: 10.0.2.1" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#4A90E2;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=router" vertex="1" parent="1">
+          <mxGeometry x="2600" y="400" width="140" height="160" as="geometry" />
+        </mxCell>
+        
+        <!-- LAN Site Secondaire -->
+        <mxCell id="sitelan" value="LAN Site Secondaire&#xa;10.0.2.0/24" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#2E7D32;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=switch" vertex="1" parent="1">
+          <mxGeometry x="2600" y="650" width="140" height="100" as="geometry" />
+        </mxCell>
+        
+        <!-- Services Site Secondaire -->
+        <mxCell id="openvpnsite" value="OpenVPN&#xa;10.0.2.11&#xa;VPN Server&#xa;1194/udp" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#D32F2F;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=server" vertex="1" parent="1">
+          <mxGeometry x="2450" y="850" width="100" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="siteclient" value="Client Site Secondaire&#xa;10.0.2.10" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#F57C00;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=9;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.cisco19.rect;prIcon=pc" vertex="1" parent="1">
+          <mxGeometry x="2630" y="780" width="80" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- ============================================ -->
+        <!-- CONNEXIONS RÉSEAU -->
+        <!-- ============================================ -->
+        
+        <!-- Internet - AS5 Border -->
+        <mxCell id="link1" value="120.0.81.0/24&#xa;BGP eBGP" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#000000;" edge="1" parent="1" source="internet" target="as5border">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1670" y="150" />
+              <mxPoint x="870" y="150" />
+              <mxPoint x="870" y="400" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- AS5 Border - AS5 Internal -->
+        <mxCell id="link2" value="120.0.80.0/24&#xa;OSPF Area 0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#000000;" edge="1" parent="1" source="as5border" target="as5internal">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="870" y="480" />
+              <mxPoint x="870" y="770" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- AS5 Internal - DNS AS5 -->
+        <mxCell id="link3" value="120.0.85.0/24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#000000;" edge="1" parent="1" source="as5internal" target="dnsas5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- AS5 Border - Entreprise Router -->
+        <mxCell id="link4" value="120.0.82.0/24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#000000;" edge="1" parent="1" source="as5border" target="entrouter">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="940" y="480" />
+              <mxPoint x="1270" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Entreprise Router - LAN -->
+        <mxCell id="link5" value="Gateway" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#00AA00;" edge="1" parent="1" source="entrouter" target="entlan">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- LAN - Services -->
+        <mxCell id="link6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;" edge="1" parent="1" source="entlan" target="dnsent">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;" edge="1" parent="1" source="entlan" target="radius">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;" edge="1" parent="1" source="entlan" target="asterisk">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;" edge="1" parent="1" source="entlan" target="nginx">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;" edge="1" parent="1" source="entlan" target="openvpn">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;" edge="1" parent="1" source="entlan" target="dhcp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- LAN - Clients -->
+        <mxCell id="link12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;" edge="1" parent="1" source="entlan" target="client1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1220" y="750" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="link13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;" edge="1" parent="1" source="entlan" target="client2">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1340" y="750" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- AS5 Border - Particulier Box -->
+        <mxCell id="link14" value="120.0.83.0/24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#000000;" edge="1" parent="1" source="as5border" target="partbox">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="800" y="480" />
+              <mxPoint x="370" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Particulier Box - LAN -->
+        <mxCell id="link15" value="Gateway" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#00AA00;" edge="1" parent="1" source="partbox" target="partlan">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- LAN Particulier - Clients -->
+        <mxCell id="link16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;" edge="1" parent="1" source="partlan" target="partclient1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;" edge="1" parent="1" source="partlan" target="partclient2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Internet - Site Secondaire -->
+        <mxCell id="link18" value="10.0.1.0/24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=3;strokeColor=#000000;" edge="1" parent="1" source="internet" target="siterouter">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1740" y="150" />
+              <mxPoint x="2670" y="150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Site Router - LAN -->
+        <mxCell id="link19" value="Gateway" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#00AA00;" edge="1" parent="1" source="siterouter" target="sitelan">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- LAN Site - Services -->
+        <mxCell id="link20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;" edge="1" parent="1" source="sitelan" target="openvpnsite">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="link21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1;strokeColor=#666666;" edge="1" parent="1" source="sitelan" target="siteclient">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2670" y="750" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- VPN Tunnel (ligne pointillée) -->
+        <mxCell id="vpn" value="VPN Site-à-Site&#xa;OpenVPN&#xa;AES-256-CBC" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=4;strokeColor=#1976D2;dashed=1;dashPattern=8 8;" edge="1" parent="1" source="openvpn" target="openvpnsite">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1650" y="900" />
+              <mxPoint x="1650" y="250" />
+              <mxPoint x="2500" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- ============================================ -->
+        <!-- LÉGENDE -->
+        <!-- ============================================ -->
+        
+        <mxCell id="legend" value="LÉGENDE&#xa;&#xa;🔵 Routeur (Bleu)&#xa;🟢 Switch (Vert)&#xa;🔴 Serveur (Rouge)&#xa;🟠 Client (Orange)&#xa;&#xa;━━━ Lien réseau (OSPF/BGP)&#xa;━━ Gateway&#xa;┅┅┅ Tunnel VPN (chiffré)&#xa;&#xa;PROTOCOLES:&#xa;• OSPF: Routage interne AS5&#xa;• BGP: Routage externe (AS1 ↔ AS5)&#xa;• NAT: Masquerade sur AS5-Border et Particulier Box&#xa;• QoS: Traffic Control sur AS5-Border&#xa;• Firewall: iptables sur Entreprise Router" style="text;html=1;strokeColor=none;fillColor=#F5F5F5;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=10;fontStyle=0" vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="280" height="280" as="geometry" />
+        </mxCell>
+        
+        <!-- ============================================ -->
+        <!-- RÉSEAUX -->
+        <!-- ============================================ -->
+        
+        <mxCell id="networks" value="RÉSEAUX&#xa;&#xa;AS5 (120.0.80.0/20):&#xa;• 120.0.80.0/24 - Backbone AS5&#xa;• 120.0.81.0/24 - Lien Internet&#xa;• 120.0.82.0/24 - Lien Entreprise&#xa;• 120.0.83.0/24 - Lien Particulier&#xa;• 120.0.84.0/24 - LAN Entreprise&#xa;• 120.0.85.0/24 - Services AS5&#xa;&#xa;Autres:&#xa;• 10.0.0.0/24 - Backbone Internet&#xa;• 10.0.1.0/24 - Lien Site Secondaire&#xa;• 10.0.2.0/24 - LAN Site Secondaire&#xa;• 192.168.5.0/24 - LAN Particulier" style="text;html=1;strokeColor=none;fillColor=#E3F2FD;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=9;fontStyle=0" vertex="1" parent="1">
+          <mxGeometry x="80" y="400" width="280" height="320" as="geometry" />
+        </mxCell>
+        
+        <!-- ============================================ -->
+        <!-- SERVICES -->
+        <!-- ============================================ -->
+        
+        <mxCell id="services" value="SERVICES ENTREPRISE&#xa;&#xa;DNS (120.0.84.10):&#xa;• Autoritaire pour entreprise5.lan&#xa;• Zone reverse configurée&#xa;&#xa;FreeRADIUS (120.0.84.11):&#xa;• Authentification 1812/udp&#xa;• Users: user1, user2, admin&#xa;&#xa;Asterisk (120.0.84.12):&#xa;• VoIP/SIP 5060/udp&#xa;• RTP 10000-10020/udp&#xa;• Extensions: 1001, 1002&#xa;&#xa;Nginx (120.0.84.13):&#xa;• Web Server port 80&#xa;• Exposé sur 8081 (hôte)&#xa;&#xa;OpenVPN (120.0.84.14):&#xa;• VPN Server 1194/udp&#xa;• Chiffrement AES-256-CBC&#xa;&#xa;DHCP (120.0.84.15):&#xa;• Attribution IP 67/udp&#xa;• Plage: 100-200" style="text;html=1;strokeColor=none;fillColor=#FFF3E0;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=9;fontStyle=0" vertex="1" parent="1">
+          <mxGeometry x="80" y="800" width="280" height="400" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
+

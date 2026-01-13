@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  particulier5-box:
+    image: alpine:latest
+    container_name: particulier5-box
+    hostname: particulier5-box
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    networks:
+      as5-particulier:
+        ipv4_address: 120.0.83.10
+      particulier5-lan:
+        ipv4_address: 192.168.5.1
+    volumes:
+      # init script en rw pour autoriser chmod +x
+      - ../../scripts/particulier-box-init.sh:/usr/local/bin/init.sh:rw
+    command: /bin/sh -c "apk add --no-cache iptables iproute2 && chmod +x /usr/local/bin/init.sh && /usr/local/bin/init.sh && tail -f /dev/null"
+    sysctls:
+      - net.ipv4.ip_forward=1
+
+  client-particulier5-1:
+    image: alpine:latest
+    container_name: client-particulier5-1
+    hostname: client-particulier5-1
+    cap_add:
+      - NET_ADMIN
+    networks:
+      particulier5-lan:
+        ipv4_address: 192.168.5.10
+    volumes:
+      - ../../scripts/client-init.sh:/usr/local/bin/init.sh:ro
+    command: /bin/sh -c "apk add --no-cache iproute2 curl bind-tools && sh /usr/local/bin/init.sh && tail -f /dev/null"
+
+  client-particulier5-2:
+    image: alpine:latest
+    container_name: client-particulier5-2
+    hostname: client-particulier5-2
+    cap_add:
+      - NET_ADMIN
+    networks:
+      particulier5-lan:
+        ipv4_address: 192.168.5.11
+    volumes:
+      - ../../scripts/client-init.sh:/usr/local/bin/init.sh:ro
+    command: /bin/sh -c "apk add --no-cache iproute2 curl bind-tools && sh /usr/local/bin/init.sh && tail -f /dev/null"
+
+networks:
+  as5-particulier:
+    external: true
+  particulier5-lan:
+    external: true
+

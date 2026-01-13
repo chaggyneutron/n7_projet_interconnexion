@@ -1,0 +1,8 @@
+// Options communes pour Bind9
+options {
+    directory "/var/cache/bind";
+    version "DNS-AS5";
+    hostname none;
+    server-id none;
+};
+

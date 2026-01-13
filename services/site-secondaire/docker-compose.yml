@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  site-secondaire-router:
+    image: alpine:latest
+    container_name: site-secondaire-router
+    hostname: site-secondaire-router
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+    networks:
+      site-secondaire:
+        ipv4_address: 10.0.1.10
+      site-secondaire-lan:
+        ipv4_address: 10.0.2.1
+    volumes:
+      - ../../scripts/site-secondaire-router-init.sh:/usr/local/bin/init.sh:rw
+      - ./config/vpn:/etc/openvpn:rw
+    command: /bin/sh -c "apk add --no-cache iptables iproute2 openvpn && chmod +x /usr/local/bin/init.sh && /usr/local/bin/init.sh && tail -f /dev/null"
+    sysctls:
+      - net.ipv4.ip_forward=1
+
+  client-site-secondaire-1:
+    image: alpine:latest
+    container_name: client-site-secondaire-1
+    hostname: client-site-secondaire-1
+    cap_add:
+      - NET_ADMIN
+    networks:
+      site-secondaire-lan:
+        ipv4_address: 10.0.2.10
+    volumes:
+      - ../../scripts/client-init.sh:/usr/local/bin/init.sh:ro
+    command: /bin/sh -c "apk add --no-cache iproute2 curl bind-tools && sh /usr/local/bin/init.sh && tail -f /dev/null"
+
+  openvpn-site-secondaire:
+    image: kylemanna/openvpn:latest
+    container_name: openvpn-site-secondaire
+    hostname: openvpn-site-secondaire
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+    networks:
+      site-secondaire-lan:
+        ipv4_address: 10.0.2.11
+    volumes:
+      - ./config/vpn:/etc/openvpn:rw
+    ports:
+      - "1195:1194/udp"
+    environment:
+      - OVPNDIR=/etc/openvpn
+    command: /bin/sh -c "if [ -f /etc/openvpn/server.conf ]; then openvpn --config /etc/openvpn/server.conf; else echo 'Certificats OpenVPN manquants'; tail -f /dev/null; fi"
+
+networks:
+  site-secondaire:
+    external: true
+  site-secondaire-lan:
+    external: true
